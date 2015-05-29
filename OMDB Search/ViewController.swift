@@ -55,7 +55,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
     func searchDataBase(searchkeyword: String){
         let baseUrl = NSURL(string: "http://www.omdbapi.com")!
-        let url = NSURL(string: "?t=" + "\(searchkeyword)" + "&y=&plot=short&tomatoes=true&r=json", relativeToURL:baseUrl)!
+        let url = NSURL(string: "?s=" + "\(searchkeyword)" + "&r=json", relativeToURL:baseUrl)!
         let request = NSMutableURLRequest(URL: url)
         let urlSession = NSURLSession.sharedSession()
         let task = urlSession.dataTaskWithRequest(request, completionHandler: {(data, response, error) -> Void in
@@ -68,7 +68,24 @@ class ViewController: UIViewController, UITextFieldDelegate {
 
     }
     
-    func parseJsonData(data: NSData){
+    func pullSelectedMovieData(searchkeyword: String){
+        let baseUrl = NSURL(string: "http://www.omdbapi.com")!
+        let url = NSURL(string: "?t=" + "\(searchkeyword)" + "&y=&plot=short&tomatoes=true&r=json", relativeToURL:baseUrl)!
+        let request = NSMutableURLRequest(URL: url)
+        let urlSession = NSURLSession.sharedSession()
+        let task = urlSession.dataTaskWithRequest(request, completionHandler: {(data, response, error) -> Void in
+            if error != nil { println(error.localizedDescription)
+            }
+            self.parseJsonData(data)
+            
+        })
+        task.resume()
+        
+    }
+
+    
+    func parseJsonData(data: NSData)->[Movie]{
+        var movies = [Movie]()
         var error: NSError?
         
         let jsonResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as? NSDictionary
@@ -78,26 +95,36 @@ class ViewController: UIViewController, UITextFieldDelegate {
         }
         
         // Parse the result
-            movie.Metascore = jsonResult?["Metascore"] as! String
+        let jsonMovies = jsonResult?["Search"] as! [AnyObject]
+        for jsonMovie in jsonMovies {
+            let movie = Movie()
             movie.title = jsonResult?["Title"] as! String
-            movie.director = jsonResult?["Director"] as! String
-            movie.genere = jsonResult?["Genre"] as! String
-            movie.plot = jsonResult?["Plot"] as! String
-            movie.rated = jsonResult?["Rated"] as! String
-            movie.runtime = jsonResult?["Runtime"] as! String
             movie.year = jsonResult?["Year"] as! String
-            movie.poster = jsonResult?["Poster"] as! String
-            movie.tomatoes = jsonResult?["tomatoUserRating"] as! String
+            
+            movies.append(movie)
+        }
+        return movies
         
-        dispatch_async(dispatch_get_main_queue(), {
-            self.titleLabel.text = self.movie.title as String
-            self.plotLabel.text = self.movie.plot as String
-            self.yearReleasedLabel.text = self.movie.year as String
-            self.yearLabel.hidden = false
-            self.tomatoesLabel.text = self.movie.tomatoes as String
-            self.updatePoster()
-           
-        })
+//            movie.Metascore = jsonResult?["Metascore"] as! String
+//            movie.title = jsonResult?["Title"] as! String
+//            movie.director = jsonResult?["Director"] as! String
+//            movie.genere = jsonResult?["Genre"] as! String
+//            movie.plot = jsonResult?["Plot"] as! String
+//            movie.rated = jsonResult?["Rated"] as! String
+//            movie.runtime = jsonResult?["Runtime"] as! String
+//            movie.year = jsonResult?["Year"] as! String
+//            movie.poster = jsonResult?["Poster"] as! String
+//            movie.tomatoes = jsonResult?["tomatoUserRating"] as! String
+        
+//        dispatch_async(dispatch_get_main_queue(), {
+//            self.titleLabel.text = self.movie.title as String
+//            self.plotLabel.text = self.movie.plot as String
+//            self.yearReleasedLabel.text = self.movie.year as String
+//            self.yearLabel.hidden = false
+//            self.tomatoesLabel.text = self.movie.tomatoes as String
+//            self.updatePoster()
+//           
+//        })
         
     }
     
