@@ -139,33 +139,33 @@ class ViewController: UIViewController, UITextFieldDelegate {
             tomatoesStatus = false
         }
     }
-    func updatePoster(){
-        let Url = NSURL(string: self.movie.poster as String)
-        var image = self.imageCache[self.movie.poster as String]
-        if( image == nil ) {
-            
-            let request: NSURLRequest = NSURLRequest(URL: Url!)
-            NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: {(response: NSURLResponse!,data: NSData!,error: NSError!) -> Void in
-                if error == nil {
-                    image = UIImage(data: data)
-                    self.imageCache[self.movie.poster as String] = image
-                    dispatch_async(dispatch_get_main_queue(), {
-                        self.moviePoster.image = image
-                        self.moviePoster.hidden = false
-                    })
-                }
-                else {
-                    println("Error: \(error.localizedDescription)")
-                }
-            })
-            
-        }
-        dispatch_async(dispatch_get_main_queue(), {
-            self.moviePoster.image = image
-            self.moviePoster.hidden = false
-        })
-
-    }
+//    func updatePoster(){
+//        let Url = NSURL(string: self.movie.poster as String)
+//        var image = self.imageCache[self.movie.poster as String]
+//        if( image == nil ) {
+//            
+//            let request: NSURLRequest = NSURLRequest(URL: Url!)
+//            NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: {(response: NSURLResponse!,data: NSData!,error: NSError!) -> Void in
+//                if error == nil {
+//                    image = UIImage(data: data)
+//                    self.imageCache[self.movie.poster as String] = image
+//                    dispatch_async(dispatch_get_main_queue(), {
+//                        self.moviePoster.image = image
+//                        self.moviePoster.hidden = false
+//                    })
+//                }
+//                else {
+//                    println("Error: \(error.localizedDescription)")
+//                }
+//            })
+//            
+//        }
+//        dispatch_async(dispatch_get_main_queue(), {
+//            self.moviePoster.image = image
+//            self.moviePoster.hidden = false
+//        })
+//
+//    }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
