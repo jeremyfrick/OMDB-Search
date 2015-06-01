@@ -16,6 +16,8 @@ class MovieSearchAnndListViewController: UICollectionViewController ,UICollectio
     var oMDBSearch = OnlineDataBaseSearch()
     var searchActive : Bool = false
     var tableData = []
+    var imageCache = [String : UIImage]()
+    
     
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -23,6 +25,10 @@ class MovieSearchAnndListViewController: UICollectionViewController ,UICollectio
         super.viewDidLoad()
         //self.searchBar.delegate = self
         oMDBSearch.delegate = self
+        
+    }
+    
+    @IBAction func unwindToHome(segue: UIStoryboardSegue) {
         
     }
     
@@ -79,16 +85,24 @@ class MovieSearchAnndListViewController: UICollectionViewController ,UICollectio
                     filmYear = rowData["Year"] as? String {
                         cell.movieTitle?.text =  filmTitle //movies[indexPath.row].title
                         cell.MovieYear?.text = filmYear //movies[indexPath.row].year
-                }
-                return cell
-
+                        var cellColor = UIColor(red: CGFloat(drand48()), green: CGFloat(drand48()), blue: CGFloat(drand48()), alpha: 1.0)
+                        cell.backgroundColor = cellColor
+                        
+                        
+                        
+        }
+        return cell
+        
     }
+    
+
+    
     
 //    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 //        return tableData.count
-//            
+//
 //    }
-// 
+//
 //    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 //        let cell = self.tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
 //       
@@ -100,7 +114,21 @@ class MovieSearchAnndListViewController: UICollectionViewController ,UICollectio
 //        }
 //        return cell
 //    }
+ 
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "showMovieDetail" {
+            var indexPaths = collectionView?.indexPathsForSelectedItems() as! [NSIndexPath]
+            var destinationViewController = segue.destinationViewController as! UINavigationController
+            var movieDetailViewController = destinationViewController.viewControllers[0] as! MovieDetailViewController
+            if let rowData: NSDictionary = self.tableData[indexPaths[0].row] as? NSDictionary,
+                filmTitle = rowData["Title"] as? String,
+                filmYear = rowData["Year"] as? String {
+            movieDetailViewController.movieName = filmTitle
+            }
+            collectionView?.deselectItemAtIndexPath(indexPaths[0], animated: false)
+        }
+    }
 }
     
 extension MovieSearchAnndListViewController : UITextFieldDelegate {
