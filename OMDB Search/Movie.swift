@@ -9,15 +9,33 @@
 import Foundation
 
 class Movie {
-    var Metascore:String = ""
-    var title:String = ""
-    var year:String = ""
-    var rated: String = ""
-    var runtime: String = ""
-    var genere: String = ""
-    var director: String = ""
-    var plot: String = ""
-    var poster: String = ""
-    var tomatoes: String = ""
+    //let Metascore:String = ""
+    let title: String
+    let year: String
+    let type: String
+    let imdbID: String
     
+    init(name: String, year: String,type: String, imdbID: String) {
+        self.title = name
+        self.year = year
+        self.type = type
+        self.imdbID = imdbID
+        }
+    
+    static func moviesWithJSON(results: NSDictionary) ->[Movie] {
+        let dataArray = results["Search"] as! NSArray
+        var movies = [Movie]()
+        if results.count > 0 {
+            for result in dataArray {
+                let title = result["Title"] as? String
+                var year = result["Year"] as? String
+                var type = result["Type"] as? String
+                var imdbID = result["imdbID"] as? String
+                var newMovie = Movie(name: title!, year: year!, type: type!, imdbID: imdbID!)
+                movies.append(newMovie)
+            }
+           
+        }
+        return movies
+    }
 }
