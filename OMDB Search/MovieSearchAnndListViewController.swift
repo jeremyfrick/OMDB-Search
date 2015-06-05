@@ -17,8 +17,8 @@ class MovieSearchAnndListViewController: UICollectionViewController ,UICollectio
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.navigationBar.barTintColor = UIColor.blackColor()
         oMDBSearch = OnlineDataBaseSearch(delegate: self)
-        
     }
     
     @IBAction func unwindToHome(segue: UIStoryboardSegue) {

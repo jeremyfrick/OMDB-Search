@@ -19,7 +19,6 @@ class MovieDetailViewController: UIViewController, searchResultsProtocol  {
     @IBOutlet weak var movieYearLabel: UILabel!
     @IBOutlet weak var movieRatingLabel: UILabel!
     @IBOutlet weak var movieRunTimeLabel: UILabel!
-    @IBOutlet weak var moviePoster: UIImageView!
     @IBOutlet weak var moviePlotText: UITextView!
     
     
@@ -29,12 +28,12 @@ class MovieDetailViewController: UIViewController, searchResultsProtocol  {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       // self.title = movieName
+        self.navigationController?.navigationBar.barTintColor = UIColor.blackColor()
+        var textAttributes = NSMutableDictionary(object: UIColor.whiteColor(), forKey: NSForegroundColorAttributeName)
+        self.navigationController!.navigationBar.titleTextAttributes = textAttributes as [NSObject : AnyObject];
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
         api.pullSelectedMovieData(self.movie!.imdbID)
-        self.moviePoster.layer.cornerRadius = 5
-        self.moviePoster.layer.masksToBounds = true
-        self.moviePoster.layer.borderWidth = 1.0
-        self.moviePoster.layer.borderColor = UIColor.grayColor().CGColor
+        
     }
     
     //MARK: - Pull Movie and poster data and update UI
@@ -57,37 +56,47 @@ class MovieDetailViewController: UIViewController, searchResultsProtocol  {
         let Url = NSURL(string: posterUrl)
         var image = self.imageCache[posterUrl]
         if( image == nil ) {
-            
             let request: NSURLRequest = NSURLRequest(URL: Url!)
             NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: {(response: NSURLResponse!,data: NSData!,error: NSError!) -> Void in
                 if error == nil {
                     image = UIImage(data: data)
                     self.imageCache[posterUrl] = image
                     dispatch_async(dispatch_get_main_queue(), {
-                        self.moviePoster.image = image
-                        
+                        self.posterLayer.contents = image?.CGImage
+                        var width = image?.size.width
+                        var height = image?.size.height
+                        self.posterLayer.contentsGravity = kCAGravityResizeAspect
+                        self.posterLayer.contentsScale = UIScreen.mainScreen().scale
+                        self.posterLayer.frame = CGRect(x: 174, y: 133, width: (width! / 2), height: (height! / 2))
+                        self.posterLayer.masksToBounds = true
+                        self.view.layer.addSublayer(self.posterLayer)
                     })
-                }
-                else {
+                
+                }else {
                     println("Error: \(error.localizedDescription)")
                 }
             })
             
-        }
+        }else {
         dispatch_async(dispatch_get_main_queue(), {
-            self.moviePoster.image = image
+            self.posterLayer.contents = image?.CGImage
+            var width = image?.size.width
+            var height = image?.size.height
+            self.posterLayer.contentsGravity = kCAGravityResizeAspect
+            self.posterLayer.contentsScale = UIScreen.mainScreen().scale
+            self.posterLayer.frame = CGRect(x: 174, y: 133, width: (width! / 2), height: (height! / 2))
+            self.posterLayer.masksToBounds = true
+            self.view.layer.addSublayer(self.posterLayer)
             
-            
-            
-        })
-        
+            })
+        }
     }
     
     //MARK: - Share feature implementation
     
     @IBAction func share(sender: AnyObject) {
         let shareText = "I am going to watch \(self.singleMovies[0].title)"
-        let shareImage = self.moviePoster.image
+        let shareImage = self.posterLayer.contents as! UIImage
         shareTextImage(sharingText: shareText, sharingImage: shareImage)
     }
     

@@ -8,8 +8,7 @@
 
 import Foundation
 
-class Movie {
-    //let Metascore:String = ""
+struct Movie {
     let title: String
     let year: String
     let type: String
@@ -27,7 +26,7 @@ class Movie {
         var movies = [Movie]()
         if results.count > 0 {
             for result in dataArray {
-                let title = result["Title"] as? String
+                var title = result["Title"] as? String
                 var year = result["Year"] as? String
                 var type = result["Type"] as? String
                 var imdbID = result["imdbID"] as? String
