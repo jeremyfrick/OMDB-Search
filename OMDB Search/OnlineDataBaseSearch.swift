@@ -19,23 +19,20 @@ class OnlineDataBaseSearch: NSObject {
     }
     
     func searchDataBase(searchkeyword: String){
-        let baseUrl = NSURL(string: "http://www.omdbapi.com")!
+        let baseUrl = NSURL(string: "http://www.omdbapi.com/")!
         let editedSearchKeyWord = searchkeyword.stringByReplacingOccurrencesOfString(" ", withString: "+", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil)
         let url = NSURL(string: "?s=" + "\(editedSearchKeyWord)" + "&r=json", relativeToURL:baseUrl)!
         let request = NSMutableURLRequest(URL: url)
         let urlSession = NSURLSession.sharedSession()
         let task = urlSession.dataTaskWithRequest(request, completionHandler: {(data, response, error) -> Void in
-            if error != nil { println(error.localizedDescription)
+            if let error = error {
+                print(error)
+                return
             }
-            var error: NSError?
-            
-            let jsonResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as? NSDictionary
-            if error != nil {
-                println(error?.localizedDescription)
-            }
+            let jsonResult = JSON(data: data!)
             
             // Parse the result
-            if let results: NSDictionary = jsonResult{
+            if let results: JSON = jsonResult{
                 self.delegate.didReceiveSearchResults(results)
             }
             })
@@ -43,23 +40,20 @@ class OnlineDataBaseSearch: NSObject {
     }
     
     func pullSelectedMovieData(searchImdbId: String) {
-        let baseUrl = NSURL(string: "http://www.omdbapi.com")!
+        let baseUrl = NSURL(string: "http://www.omdbapi.com/")!
         let url = NSURL(string: "?i=" + "\(searchImdbId)" + "&y=&plot=short&tomatoes=true&r=json", relativeToURL:baseUrl)!
         //let request = NSMutableURLRequest(URL: url)
         let urlSession = NSURLSession.sharedSession()
         let task = urlSession.dataTaskWithURL(url, completionHandler: {(data, response, error) -> Void in
-            if error != nil { println(error.localizedDescription)
+            if error != nil { print(error!.localizedDescription)
             }
-            var error: NSError?
             
-            let jsonResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as? NSDictionary
-            if error != nil {
-                println(error?.localizedDescription)
-            }
+            let jsonResult = JSON(data: data!)
             
             // Parse the result
-            if let results: NSDictionary = jsonResult {
-                self.delegate.didReceiveSearchResults(results)            }
+            if let results: JSON = jsonResult {
+                self.delegate.didReceiveSearchResults(results)
+            }
         })
         task.resume()
     }
@@ -67,6 +61,6 @@ class OnlineDataBaseSearch: NSObject {
 //MARK: - Protocols
 
 protocol searchResultsProtocol {
-    func didReceiveSearchResults(results: NSDictionary)
+    func didReceiveSearchResults(results: JSON)
     
 }

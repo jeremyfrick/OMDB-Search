@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class MovieSearchAnndListViewController: UICollectionViewController ,UICollectionViewDataSource, searchResultsProtocol {
+class MovieSearchAnndListViewController: UICollectionViewController, searchResultsProtocol {
     var movies = [Movie]()
     var oMDBSearch: OnlineDataBaseSearch!
     var searchActive : Bool = false
@@ -26,7 +26,7 @@ class MovieSearchAnndListViewController: UICollectionViewController ,UICollectio
     }
     
     
-    func didReceiveSearchResults(results: NSDictionary) {
+    func didReceiveSearchResults(results: JSON) {
         dispatch_async(dispatch_get_main_queue(), {
             self.movies = Movie.moviesWithJSON(results)
             self.collectionView!.reloadData()
@@ -57,12 +57,15 @@ class MovieSearchAnndListViewController: UICollectionViewController ,UICollectio
     //MARK: - Segue Control
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showMovieDetail" {
-            var indexPaths = collectionView?.indexPathsForSelectedItems() as! [NSIndexPath]
-            var destinationViewController = segue.destinationViewController as! UINavigationController
-            var movieDetailViewController = destinationViewController.viewControllers[0] as! MovieDetailViewController
-            let selectedMovie = self.movies[indexPaths[0].row]
-            movieDetailViewController.movie = selectedMovie
-            collectionView?.deselectItemAtIndexPath(indexPaths[0], animated: false)
+            if let indexPaths = collectionView?.indexPathsForSelectedItems() {
+                let destinationViewController = segue.destinationViewController as! UINavigationController
+                let movieDetailViewController = destinationViewController.viewControllers[0] as! MovieDetailViewController
+                let selectedMovie = self.movies[indexPaths[0].row]
+                movieDetailViewController.movie = selectedMovie
+                collectionView?.deselectItemAtIndexPath(indexPaths[0], animated: false)
+
+            }
+            
         }
     }
 }
@@ -73,7 +76,7 @@ extension MovieSearchAnndListViewController : UITextFieldDelegate {
         textField.addSubview(activityIndicator)
         activityIndicator.frame = textField.bounds
         activityIndicator.startAnimating()
-        oMDBSearch.searchDataBase(textField.text)
+        oMDBSearch.searchDataBase(textField.text!)
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         activityIndicator.removeFromSuperview()
         textField.text = nil

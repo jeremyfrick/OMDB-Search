@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9634FAE51C4D6D970026844D /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9634FAE41C4D6D970026844D /* SwiftyJSON.swift */; settings = {ASSET_TAGS = (); }; };
 		967004CD1B1A275800FE381C /* OnlineDataBaseSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967004CC1B1A275800FE381C /* OnlineDataBaseSearch.swift */; };
 		96DB45B41B1CC729008D698F /* MovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DB45B31B1CC729008D698F /* MovieCell.swift */; };
 		96DB45B71B1CE817008D698F /* MovieDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DB45B61B1CE817008D698F /* MovieDetailViewController.swift */; };
@@ -31,6 +32,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9634FAE41C4D6D970026844D /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		967004CC1B1A275800FE381C /* OnlineDataBaseSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnlineDataBaseSearch.swift; sourceTree = "<group>"; };
 		96DB45B31B1CC729008D698F /* MovieCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieCell.swift; sourceTree = "<group>"; };
 		96DB45B61B1CE817008D698F /* MovieDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieDetailViewController.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 				96DD38571B202AD00089D2D6 /* View Controllers */,
 				96E732561AB799ED0039B818 /* AppDelegate.swift */,
 				967004CC1B1A275800FE381C /* OnlineDataBaseSearch.swift */,
+				9634FAE41C4D6D970026844D /* SwiftyJSON.swift */,
 				96E7325A1AB799ED0039B818 /* Main.storyboard */,
 				96DD38581B202AEB0089D2D6 /* Movie Structs */,
 				96E7325D1AB799ED0039B818 /* Images.xcassets */,
@@ -255,6 +258,7 @@
 				96E5CA911B181D740026D146 /* MovieSearchAnndListViewController.swift in Sources */,
 				967004CD1B1A275800FE381C /* OnlineDataBaseSearch.swift in Sources */,
 				96DB45B41B1CC729008D698F /* MovieCell.swift in Sources */,
+				9634FAE51C4D6D970026844D /* SwiftyJSON.swift in Sources */,
 				96DB45B91B1FF4A2008D698F /* SingleMovie.swift in Sources */,
 				96DB45B71B1CE817008D698F /* MovieDetailViewController.swift in Sources */,
 				96E732571AB799ED0039B818 /* AppDelegate.swift in Sources */,
